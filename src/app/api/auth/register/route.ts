@@ -40,13 +40,13 @@ export async function POST(request: NextRequest) {
         email: emailLower,
         passwordHash,
         phone: phone || null,
-        verifyToken,
-        emailVerified: false,
+        verifyToken: null,
+        emailVerified: true, // Auto-verify for MVP
       },
     });
 
-    // Send verification email (non-blocking)
-    sendVerificationEmail(emailLower, name, verifyToken).catch(console.error);
+    // We skip sending email for local development to avoid SMTP errors
+    // sendVerificationEmail(emailLower, name, verifyToken).catch(console.error);
 
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {

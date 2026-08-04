@@ -51,11 +51,11 @@ export default function RegisterPage({ params }: { params: Promise<{ locale: Loc
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-md bg-gray-900 border border-white/10 rounded-2xl p-8 text-center shadow-2xl">
-          <div className="text-5xl mb-4">📧</div>
-          <h2 className="text-2xl font-bold text-white mb-3">Проверьте почту</h2>
+          <div className="text-5xl mb-4">✅</div>
+          <h2 className="text-2xl font-bold text-white mb-3">Регистрация успешна!</h2>
           <p className="text-gray-400 text-sm leading-relaxed">
-            Мы отправили письмо на <strong className="text-white">{form.email}</strong>.
-            <br />Перейдите по ссылке в письме для активации аккаунта.
+            Ваш аккаунт <strong className="text-white">{form.email}</strong> был успешно создан.
+            <br />Теперь вы можете войти в систему.
           </p>
           <Link
             href={`/${locale}/auth/login`}

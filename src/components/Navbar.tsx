@@ -71,7 +71,7 @@ export function Navbar({ locale }: { locale: Locale }) {
                   Кабинет
                 </Link>
                 <Link
-                  href={`/${locale}/ads/new`}
+                  href={`/${locale}/ads/create`}
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-indigo-900/30"
                 >
                   + Подать объявление
@@ -137,7 +137,7 @@ export function Navbar({ locale }: { locale: Locale }) {
                   Кабинет
                 </Link>
                 <Link
-                  href={`/${locale}/ads/new`}
+                  href={`/${locale}/ads/create`}
                   className="block bg-indigo-600 text-white text-center py-2 rounded-lg font-semibold"
                 >
                   + Подать объявление
