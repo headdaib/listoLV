@@ -1,8 +1,9 @@
-import crypto from "crypto";
 import bcrypt from "bcryptjs";
 
 export function generateToken(): string {
-  return crypto.randomBytes(32).toString("hex");
+  return Array.from(crypto.getRandomValues(new Uint8Array(32)))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 export async function hashPassword(password: string): Promise<string> {

@@ -16,7 +16,7 @@ export const authConfig: NextAuthConfig = {
       const isOnAdmin = nextUrl.pathname.startsWith("/admin");
 
       if (isOnAdmin) {
-        if (isLoggedIn && auth?.user?.role === "ADMIN") return true;
+        if (isLoggedIn && (auth?.user as unknown as { role?: string })?.role === "ADMIN") return true;
         return false;
       }
       if (isOnDashboard) {
@@ -28,16 +28,16 @@ export const authConfig: NextAuthConfig = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as { role: string }).role;
-        token.emailVerified = (user as { emailVerified: boolean }).emailVerified;
+        token.role = (user as unknown as { role: string }).role || "USER";
+        token.emailVerified = !!(user as unknown as { emailVerified: Date | null }).emailVerified;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        (session.user as { role?: string }).role = token.role as string;
-        (session.user as { emailVerified?: boolean }).emailVerified = token.emailVerified as boolean;
+        (session.user as unknown as { role?: string }).role = token.role as string;
+        (session.user as unknown as { emailVerified?: boolean }).emailVerified = token.emailVerified as boolean;
       }
       return session;
     },
