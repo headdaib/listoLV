@@ -57,7 +57,8 @@ export function DashboardAdList({ initialAds, locale }: Props) {
           key={ad.id} 
           ad={ad} 
           locale={locale} 
-          onDelete={handleDelete} 
+          onDelete={handleDelete}
+          editUrl={`/${locale}/ads/edit/${ad.id}`}
         />
       ))}
     </div>
