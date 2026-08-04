@@ -73,16 +73,22 @@ export default async function AdDetailsPage({ params }: Props) {
               </div>
 
               {ad.user.phone && (
-                <button className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2">
+                <a 
+                  href={`tel:${ad.user.phone.replace(/[^0-9+]/g, '')}`}
+                  className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+                >
                   <span>📞</span>
                   {ad.user.phone}
-                </button>
+                </a>
               )}
               
-              <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold py-3 rounded-lg transition-all shadow-lg shadow-indigo-900/30 flex items-center justify-center gap-2">
+              <a 
+                href={`mailto:${ad.user.email}?subject=По поводу объявления: ${ad.title}`}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold py-3 rounded-lg transition-all shadow-lg shadow-indigo-900/30 flex items-center justify-center gap-2"
+              >
                 <span>✉️</span>
                 Написать сообщение
-              </button>
+              </a>
             </div>
           </div>
         </div>
