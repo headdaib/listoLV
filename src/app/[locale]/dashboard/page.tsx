@@ -41,12 +41,20 @@ export default async function DashboardPage({ params }: Props) {
           <h1 className="text-3xl font-bold text-white">Личный Кабинет</h1>
           <p className="text-gray-400 mt-2">Добро пожаловать, {session.user.name}</p>
         </div>
-        <Link
-          href={`/${locale}/ads/create`}
-          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all"
-        >
-          + Подать объявление
-        </Link>
+        <div className="flex gap-4">
+          <Link
+            href={`/${locale}/dashboard/settings`}
+            className="bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold px-6 py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+          >
+            <span>⚙️</span> Настройки
+          </Link>
+          <Link
+            href={`/${locale}/ads/create`}
+            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all"
+          >
+            + Подать объявление
+          </Link>
+        </div>
       </div>
 
       <div className="bg-gray-900 border border-white/10 rounded-2xl p-6 mb-8">
