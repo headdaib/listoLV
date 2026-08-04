@@ -28,7 +28,7 @@ const categoryName = (cat: AdCardProps["ad"]["category"], locale: Locale) => {
   return cat.nameRu;
 };
 
-export function AdCard({ ad, locale, onDelete }: AdCardProps) {
+export function AdCard({ ad, locale, onDelete, editUrl }: AdCardProps) {
   const thumb = ad.images[0]?.url;
   const timeAgo = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
   // eslint-disable-next-line react-hooks/purity
