@@ -28,7 +28,7 @@ export function CategoryGrid({ categories, locale }: CategoryGridProps) {
         {categories.map((cat) => (
           <Link
             key={cat.id}
-            href={`/${locale}/category/${cat.slug}`}
+            href={`/${locale}/ads?category=${cat.id}`}
             className="group flex flex-col items-center gap-2 bg-gray-900 hover:bg-gray-800 border border-white/5 hover:border-indigo-500/30 rounded-xl p-4 transition-all duration-200 hover:shadow-lg hover:shadow-indigo-900/10"
           >
             <span className="text-3xl">{cat.icon || "📦"}</span>
