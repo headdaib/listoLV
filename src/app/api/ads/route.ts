@@ -16,7 +16,7 @@ const adSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Create ad error:", error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ error: (error as any).errors[0].message }, { status: 400 });
     }
     return NextResponse.json({ error: "Ошибка сервера при создании объявления" }, { status: 500 });
   }

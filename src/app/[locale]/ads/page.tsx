@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
 import { AdCard } from "@/components/AdCard";
 import Link from "next/link";
 import type { Locale } from "@/i18n/request";
@@ -33,13 +34,17 @@ export default async function AdsListingPage({ params, searchParams }: Props) {
   }
 
   // Fetch data
-  const [ads, categories] = await Promise.all([
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const [adsData, categories] = await Promise.all([
     db.ad.findMany({
       where,
       include: {
         images: { orderBy: { order: "asc" }, take: 1 },
         category: true,
         user: { select: { name: true } },
+        favorites: userId ? { where: { userId } } : false,
       },
       orderBy: { createdAt: "desc" },
     }),
@@ -49,6 +54,12 @@ export default async function AdsListingPage({ params, searchParams }: Props) {
       include: { children: true },
     }),
   ]);
+
+  const ads = adsData.map((ad) => ({
+    ...ad,
+    price: ad.price ? Number(ad.price) : null,
+    isFavorited: ad.favorites ? ad.favorites.length > 0 : false,
+  }));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

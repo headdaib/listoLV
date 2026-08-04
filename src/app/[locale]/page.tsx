@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { AdCard } from "@/components/AdCard";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import { HeroSearch } from "@/components/HeroSearch";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
 import type { Locale } from "@/i18n/request";
 
@@ -9,8 +10,8 @@ interface Props {
   params: Promise<{ locale: Locale }>;
 }
 
-async function getHomeData() {
-  const [categories, latestAds] = await Promise.all([
+async function getHomeData(userId?: string) {
+  const [categories, adsData] = await Promise.all([
     db.category.findMany({
       where: { parentId: null },
       include: { _count: { select: { ads: { where: { status: "ACTIVE" } } } } },
@@ -18,17 +19,29 @@ async function getHomeData() {
     }),
     db.ad.findMany({
       where: { status: "ACTIVE" },
-      include: { images: { orderBy: { order: "asc" }, take: 1 }, category: true, user: { select: { name: true } } },
+      include: { 
+        images: { orderBy: { order: "asc" }, take: 1 }, 
+        category: true, 
+        user: { select: { name: true } },
+        favorites: userId ? { where: { userId } } : false,
+      },
       orderBy: { createdAt: "desc" },
       take: 12,
     }),
   ]);
+
+  const latestAds = adsData.map((ad) => ({
+    ...ad,
+    isFavorited: ad.favorites ? ad.favorites.length > 0 : false,
+  }));
+
   return { categories, latestAds };
 }
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
-  const { categories, latestAds } = await getHomeData();
+  const session = await auth();
+  const { categories, latestAds } = await getHomeData(session?.user?.id);
 
   return (
     <div>

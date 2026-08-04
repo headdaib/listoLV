@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Link from "next/link";
-import { AdCard } from "@/components/AdCard";
+import { DashboardAdList } from "@/components/DashboardAdList";
 import type { Locale } from "@/i18n/request";
 
 interface Props {
@@ -17,15 +17,22 @@ export default async function DashboardPage({ params }: Props) {
     redirect(`/${locale}/auth/login`);
   }
 
-  const userAds = await db.ad.findMany({
+  const userAdsData = await db.ad.findMany({
     where: { userId: session.user.id },
     include: {
       images: { orderBy: { order: "asc" }, take: 1 },
       category: true,
       user: { select: { name: true } },
+      favorites: { where: { userId: session.user.id } },
     },
     orderBy: { createdAt: "desc" },
   });
+
+  const userAds = userAdsData.map(ad => ({
+    ...ad,
+    price: ad.price ? Number(ad.price) : null,
+    isFavorited: ad.favorites.length > 0,
+  }));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -44,19 +51,7 @@ export default async function DashboardPage({ params }: Props) {
 
       <div className="bg-gray-900 border border-white/10 rounded-2xl p-6 mb-8">
         <h2 className="text-xl font-bold text-white mb-6">Ваши объявления</h2>
-        
-        {userAds.length === 0 ? (
-          <div className="text-center py-12 text-gray-400">
-            <p className="text-4xl mb-4">📝</p>
-            <p>У вас пока нет активных объявлений.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {userAds.map((ad) => (
-              <AdCard key={ad.id} ad={{ ...ad, price: ad.price ? Number(ad.price) : null }} locale={locale} />
-            ))}
-          </div>
-        )}
+        <DashboardAdList initialAds={userAds} locale={locale} />
       </div>
     </div>
   );

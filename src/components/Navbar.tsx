@@ -65,6 +65,12 @@ export function Navbar({ locale }: { locale: Locale }) {
             {session ? (
               <div className="flex items-center gap-3">
                 <Link
+                  href={`/${locale}/favorites`}
+                  className="text-gray-300 hover:text-white text-sm font-medium transition-colors flex items-center gap-1"
+                >
+                  <span className="text-red-500">❤️</span> Избранное
+                </Link>
+                <Link
                   href={`/${locale}/dashboard`}
                   className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
                 >

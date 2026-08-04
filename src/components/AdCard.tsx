@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
+import { FavoriteButton } from "./FavoriteButton";
 import type { Locale } from "@/i18n/request";
 
 interface AdCardProps {
@@ -14,8 +15,10 @@ interface AdCardProps {
     images: { url: string }[];
     category: { nameRu: string; nameLv: string; nameEn: string };
     user: { name: string };
+    isFavorited?: boolean;
   };
   locale: Locale;
+  onDelete?: (id: string) => void;
 }
 
 const categoryName = (cat: AdCardProps["ad"]["category"], locale: Locale) => {
@@ -24,7 +27,7 @@ const categoryName = (cat: AdCardProps["ad"]["category"], locale: Locale) => {
   return cat.nameRu;
 };
 
-export function AdCard({ ad, locale }: AdCardProps) {
+export function AdCard({ ad, locale, onDelete }: AdCardProps) {
   const thumb = ad.images[0]?.url;
   const timeAgo = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
   // eslint-disable-next-line react-hooks/purity
@@ -53,7 +56,23 @@ export function AdCard({ ad, locale }: AdCardProps) {
               📷
             </div>
           )}
-          <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+          <div className="absolute top-2 left-2 z-10">
+            <FavoriteButton adId={ad.id} initialFavorited={ad.isFavorited || false} locale={locale} />
+          </div>
+          {onDelete && (
+            <div className="absolute bottom-2 right-2 z-10">
+              <button
+                onClick={(e) => { e.preventDefault(); onDelete(ad.id); }}
+                className="bg-red-500/80 hover:bg-red-500 text-white p-2 rounded-lg backdrop-blur-sm transition-colors shadow-lg"
+                title="Удалить объявление"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          )}
+          <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full z-10">
             {categoryName(ad.category, locale)}
           </div>
         </div>
