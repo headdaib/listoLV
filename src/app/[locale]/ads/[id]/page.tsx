@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import Image from "next/image";
+import { AdImageGallery } from "@/components/AdImageGallery";
 import type { Locale } from "@/i18n/request";
 
 interface Props {
@@ -29,33 +30,7 @@ export default async function AdDetailsPage({ params }: Props) {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
           <div className="bg-gray-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-            {/* Image Gallery */}
-            <div className="relative aspect-video bg-gray-950">
-              {ad.images.length > 0 ? (
-                <Image
-                  src={ad.images[0].url}
-                  alt={ad.title}
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-700 text-6xl">
-                  📷
-                </div>
-              )}
-            </div>
-            
-            {/* Thumbnail Strip */}
-            {ad.images.length > 1 && (
-              <div className="flex gap-2 p-4 overflow-x-auto bg-gray-900/50">
-                {ad.images.map((img) => (
-                  <div key={img.id} className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-white/10 cursor-pointer hover:border-indigo-500 transition-colors">
-                    <Image src={img.url} alt="" fill className="object-cover" />
-                  </div>
-                ))}
-              </div>
-            )}
+            <AdImageGallery images={ad.images} title={ad.title} />
           </div>
 
           {/* Details */}
