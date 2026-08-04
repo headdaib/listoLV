@@ -31,10 +31,16 @@ export default async function LocaleLayout({
       <body>
         <SessionProvider session={session}>
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <div className="min-h-screen flex flex-col bg-gray-950">
-              <Navbar locale={locale} />
-              <main className="flex-1">{children}</main>
-              <Footer />
+            <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#030712]">
+              {/* Premium Background Effects */}
+              <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-transparent blur-[120px] pointer-events-none -z-10" />
+              <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none -z-10" />
+              
+              <div className="z-10 flex flex-col min-h-screen">
+                <Navbar locale={locale} />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
             </div>
           </NextIntlClientProvider>
         </SessionProvider>

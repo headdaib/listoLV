@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ListoLV — MVP Документация
 
-## Getting Started
+Добро пожаловать в проект **ListoLV** — современную платформу объявлений! 
+Ниже представлено описание дизайн-системы, верстки и полностью протестированного функционала, который вошел в финальную версию MVP.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎨 1. Дизайн и Верстка (Design System)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Проект использует современный **Темный режим (Dark Mode)** с акцентом на премиальность, минимализм и удобство использования. 
+Вся верстка реализована с помощью **Tailwind CSS**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Основные визуальные решения:
+- **Цветовая палитра**: 
+  - Фон: Глубокий черный (`#030712` / `gray-950`) для комфортного чтения в темное время суток.
+  - Акценты: Индиго (`indigo-500` / `indigo-600`) и Пурпурный (`purple-500`) в виде элегантных градиентов для кнопок (Call-to-Action) и фоновых эффектов.
+  - Карточки: Темно-серый (`gray-900`) с полупрозрачными рамками (`white/10`) для эффекта объема.
+- **Glassmorphism (Эффект матового стекла)**:
+  - Используется класс `backdrop-blur-sm` в навигации и всплывающих кнопках на фотографиях, что придает интерфейсу глубину и современный вид.
+- **Глобальные фоновые эффекты**:
+  - На всех страницах (через `layout.tsx`) реализована подложка с мягкими, размытыми цветовыми пятнами (blur 120-150px) цвета индиго и пурпура, создающая приятную неоновую атмосферу.
+- **Типографика**:
+  - Использован системный шрифт `Inter` — строгий, удобочитаемый, без засечек.
+- **Анимации и переходы**:
+  - Плавное появление элементов (`duration-200`, `duration-300`).
+  - Микроанимации при наведении на карточки объявлений (легкое поднятие вверх `-translate-y-0.5` и масштабирование картинки `scale-105`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ⚙️ 2. Готовый и протестированный функционал
 
-To learn more about Next.js, take a look at the following resources:
+Ниже перечислены все рабочие модули платформы. Каждый из них был протестирован в локальном окружении MariaDB + Next.js.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🔑 Аутентификация и Профиль
+- **Регистрация / Вход**: Работает через `NextAuth`. Для MVP отключена обязательная email-верификация, что позволяет сразу входить в систему.
+- **Хеширование**: Пароли безопасно хешируются с использованием `bcryptjs`.
+- **Настройки профиля**: В Личном кабинете можно обновить Имя, номер телефона и безопасно сменить пароль (с проверкой старого).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 📝 Управление объявлениями (CRUD)
+- **Создание (Create)**:
+  - Форма поддерживает Drag-and-Drop загрузку нескольких изображений (сохраняются в `public/uploads`).
+  - Загрузка картинок происходит ДО создания самого объявления через отдельный API `/api/upload`.
+  - Поля защищены строгой валидацией `Zod` как на клиенте, так и на сервере.
+- **Чтение (Read)**:
+  - Полнотекстовый поиск (`@@fulltext` в Prisma) по заголовкам и описанию.
+  - Фильтрация по категориям (через параметры URL `?category=X`).
+  - Интерактивная галерея фото на странице объявления с кликабельными миниатюрами.
+- **Редактирование (Update)**:
+  - Возможность редактировать текстовые данные объявления (заголовок, цена, описание, город, категория) прямо из кабинета.
+- **Удаление (Delete)**:
+  - Удаление своих объявлений из Личного кабинета (работает асинхронно, карточка моментально исчезает из UI).
 
-## Deploy on Vercel
+### ❤️ Пользовательский опыт
+- **Избранное**: 
+  - Любой авторизованный пользователь может нажать "сердечко" на карточке товара.
+  - Сохраненные товары доступны на специальной странице `/favorites` и в мобильном меню.
+- **Связь с продавцом**:
+  - Кнопка "Позвонить" генерирует кликабельную ссылку `tel:`, очищая номер от лишних символов для смартфона.
+  - Кнопка "Написать сообщение" использует протокол `mailto:`, подставляя email продавца и тему письма.
+- **Мультиязычность**:
+  - Базовая инфраструктура построена с учетом `next-intl` (маршруты `/[locale]/...`). Доступны RU, LV, EN.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Как запустить для проверки
+
+1. **Запуск базы данных**: Убедитесь, что MariaDB (mysqld) запущен в директории `db-server`.
+2. **Установка зависимостей** (если необходимо): `npm install`
+3. **Запуск сервера**: `npm run dev`
+4. Откройте `http://localhost:3000` в браузере.
