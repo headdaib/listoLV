@@ -139,6 +139,9 @@ export function Navbar({ locale }: { locale: Locale }) {
             </div>
             {session ? (
               <>
+                <Link href={`/${locale}/favorites`} className="block text-gray-300 hover:text-white py-2 flex items-center gap-1">
+                  <span className="text-red-500">❤️</span> Избранное
+                </Link>
                 <Link href={`/${locale}/dashboard`} className="block text-gray-300 hover:text-white py-2">
                   Кабинет
                 </Link>
